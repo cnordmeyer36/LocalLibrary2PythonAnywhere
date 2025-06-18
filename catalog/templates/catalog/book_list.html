@@ -1,0 +1,26 @@
+{% extends "catalog/base.html" %}
+
+{% block content %}
+    <h1>Book List</h1>
+    {% if user.is_superuser %}
+        <div>
+            <a href="{% url 'book_create' %}">Add a new book</a>
+        </div>
+    {% endif %}
+    {% if book_list %}
+        <ul>
+            {% for book in book_list %}
+                <li>
+                    <a href="{{ book.get_absolute_url }}">{{ book.title }}</a>
+                    ({{ book.author }})
+                    {% if user.is_superuser %}
+                        | <a href="{% url 'book_update' book.id %}">Edit</a>
+                        | <a href="{% url 'book_delete' book.id %}" onclick="return confirm('Are you sure?');">Delete</a>
+                    {% endif %}
+                </li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p>There are no books in the library.</p>
+    {% endif %}
+{% endblock %}
